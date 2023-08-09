@@ -23,11 +23,36 @@ app.get("/data", (req, res) => {
   res.status(200).json(data);
 });
 
+app.delete("/delete/:email", (req, res) => {
+  const emailToDelete = req.params.email;
 
+  // Find the index of the item with the specified email
+  const indexToDelete = data.findIndex(item => item.email === emailToDelete);
 
-app.post('/Login',(req,res)=>{
-console.log(req.body);
-})
+  if (indexToDelete !== -1) {
+    // Remove the item at the specified index
+    data.splice(indexToDelete, 1);
+    res.status(200).json({ message: "Data deleted successfully" });
+  } else {
+    res.status(404).json({ message: "Email not found" });
+  }
+});
+
+app.put("/update/:email", (req, res) => {
+  const emailToUpdate = req.params.email;
+  const newData = req.body;
+
+  // Find the index of the item with the specified email
+  const indexToUpdate = data.findIndex(item => item.email === emailToUpdate);
+
+  if (indexToUpdate !== -1) {
+    // Update the item's data
+    data[indexToUpdate] = { ...data[indexToUpdate], ...newData };
+    res.status(200).json({ message: "Data updated successfully" });
+  } else {
+    res.status(404).json({ message: "Email not found" });
+  }
+});
 
 
 
